@@ -1,0 +1,485 @@
+---
+title: "IPAT 1 — Wild Fish Extraction for Norwegian Salmon Feed"
+
+date: "Spring 2026"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Period: 2000–2013 | Species: Atlantic salmon only
+
+## Identity: W = P × (F/P) × (M/F) × (W/M)
+
+## Step 0 — Load Libraries
+
+```{r libraries}
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+library(knitr)
+library(scales)
+
+theme_set(theme_minimal(base_size = 11) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(colour = "grey80")
+  ))
+```
+
+---
+
+## Step 1 — Load P (Atlantic Salmon Sales from Fiskeridir)
+
+**Key fix**: The `Totalt/Total` row contains Excel `=SUM()` formulas which R cannot evaluate.
+We instead **sum the county rows directly** to obtain the national total.
+
+```{r load_P}
+extract_atlantic_salmon_totals <- function(filepath) {
+  sheets <- excel_sheets(filepath)
+  results <- list()
+  seen_years <- c()
+
+  for (sheet_name in sheets) {
+    df <- read_excel(filepath, sheet = sheet_name, col_names = FALSE)
+    nrows <- nrow(df)
+
+    for (start_row in 1:(nrows - 5)) {
+      year_row <- suppressWarnings(as.numeric(as.character(unlist(df[start_row, ]))))
+      years_found <- year_row[!is.na(year_row) & year_row >= 1990 & year_row <= 2030]
+      if (length(years_found) < 2) next
+
+      year_cols <- which(!is.na(year_row) & year_row >= 1990 & year_row <= 2030)
+
+      # Find the Total row index
+      total_row_idx <- NA
+      for (j in (start_row + 1):min(start_row + 30, nrows)) {
+        cell <- as.character(df[j, 1])
+        if (grepl("Totalt|Total", cell, ignore.case = TRUE)) {
+          total_row_idx <- j
+          break
+        }
+      }
+      if (is.na(total_row_idx)) next
+
+      # Data rows = skip 2 col-name rows after header, up to (not including) Total row
+      data_start <- start_row + 3
+      data_end   <- total_row_idx - 1
+      if (data_end < data_start) next
+
+      # For each year, sum Laks column (at year_col index) across county rows
+      for (col_idx in year_cols) {
+        yr <- as.integer(year_row[col_idx])
+        if (yr %in% seen_years) next
+
+        county_vals <- suppressWarnings(
+          as.numeric(as.character(unlist(df[data_start:data_end, col_idx])))
+        )
+        total_laks <- sum(county_vals, na.rm = TRUE)
+
+        if (!is.na(total_laks) && total_laks > 10000) {
+          results[[length(results) + 1]] <- data.frame(
+            year = yr,
+            atlantic_salmon_t = total_laks
+          )
+          seen_years <- c(seen_years, yr)
+        }
+      }
+      break
+    }
+  }
+
+  bind_rows(results) |> arrange(year)
+}
+
+SALG_FILE <- "data_sales.xlsx"
+df_raw <- extract_atlantic_salmon_totals(SALG_FILE)
+
+df_P <- df_raw |>
+  filter(year >= 2000, year <= 2013) |>
+  arrange(year)
+
+kable(df_P, caption = "P — Atlantic salmon sales (tonnes round weight), 2000–2013",
+      format.args = list(big.mark = ","))
+```
+
+### Plot P
+
+```{r plot_P, fig.width=9, fig.height=4}
+ggplot(df_P, aes(x = year, y = atlantic_salmon_t / 1e6)) +
+  geom_area(alpha = 0.15, fill = "steelblue") +
+  geom_line(colour = "steelblue", linewidth = 1.2) +
+  geom_point(colour = "steelblue", size = 3) +
+  geom_text(
+    data = df_P[c(1, nrow(df_P)), ],
+    aes(label = paste0(round(atlantic_salmon_t / 1e6, 2), " Mt")),
+    vjust = -1, size = 3.2, colour = "steelblue"
+  ) +
+  scale_x_continuous(breaks = df_P$year) +
+  labs(
+    title = "P — Atlantic salmon production in Norway (2000–2013)",
+    subtitle = "Source: Fiskeridir data_sales.xlsx",
+    x = "Year", y = "Million tonnes (round weight)"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("Images/Atlantic_Salmon_production.png", width = 9, height = 4, dpi = 300)
+
+
+```
+
+---
+
+## Step 2 — Nofima Benchmark Data + Linear Interpolation
+
+```{r nofima_benchmarks}
+df_nofima <- data.frame(
+  year = c(2000,  2010,  2012,  2013),
+  M_F  = c(0.646, 0.414, 0.307, 0.292),
+  FCR  = c(1.50,  1.20,  1.15,  1.15),
+  W_M  = c(1.80,  1.10,  0.70,  0.70)
+)
+kable(df_nofima, caption = "Nofima benchmark data")
+```
+
+### Linear Interpolation to Annual Values
+
+```{r interpolation}
+all_years <- df_P$year
+
+df_interp <- data.frame(
+  year = all_years,
+  M_F  = approx(df_nofima$year, df_nofima$M_F, xout = all_years)$y,
+  FCR  = approx(df_nofima$year, df_nofima$FCR, xout = all_years)$y,
+  W_M  = approx(df_nofima$year, df_nofima$W_M, xout = all_years)$y
+)
+
+kable(round(df_interp, 4), caption = "Interpolated annual values")
+```
+
+### Plot Interpolated Series vs Benchmark Points
+
+```{r plot_interpolated, fig.width=14, fig.height=4}
+plot_factor <- function(var, title, ylabel, color) {
+  ggplot() +
+    geom_line(data = df_interp, aes(x = year, y = .data[[var]]),
+              colour = color, linewidth = 1.2) +
+    geom_point(data = df_nofima, aes(x = year, y = .data[[var]]),
+               colour = color, size = 3, shape = 21,
+               fill = "white", stroke = 1.5) +
+    geom_text(data = df_nofima,
+              aes(x = year, y = .data[[var]],
+                  label = round(.data[[var]], 3)),
+              vjust = -1.2, size = 2.8, colour = color) +
+    scale_x_continuous(breaks = all_years) +
+    labs(title = title, x = "Year", y = ylabel) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+
+p1 <- plot_factor("M_F", "M/F — Marine ingredient share",
+                  "Fraction of feed (kg/kg)", "#008080")
+p2 <- plot_factor("FCR", "F/P — Feed conversion ratio",
+                  "kg feed / kg salmon", "darkorange")
+p3 <- plot_factor("W_M", "W/M — FFDR_FM (forage fish)",
+                  "kg wild fish / kg marine", "firebrick")
+
+combined_interp <- p1 + p2 + p3 +
+  plot_annotation(
+    title = "Piecewise linear interpolation between Nofima benchmarks (2000–2013)",
+    subtitle = "Sources: Ytrestøyl et al. (2015) + Nofima Report 36/2014"
+  )
+
+combined_interp
+ggsave("Images/Ipat1_Interpolation_factors.png", plot = combined_interp, width = 14, height = 4, dpi = 300, create.dir = TRUE)
+```
+
+---
+
+## Step 3 — Compute W
+
+```{r compute_W}
+df <- df_P |>
+  left_join(df_interp, by = "year") |>
+  mutate(
+    F_t = atlantic_salmon_t * FCR,
+    M_t = F_t * M_F,
+    W_t = M_t * W_M
+  )
+
+df |>
+  select(year,
+         `P (t)` = atlantic_salmon_t,
+         `F/P`   = FCR,
+         `M/F`   = M_F,
+         `W/M`   = W_M,
+         `F (t)` = F_t,
+         `M (t)` = M_t,
+         `W (t)` = W_t) |>
+  mutate(
+    across(c(`P (t)`, `F (t)`, `M (t)`, `W (t)`), round),
+    across(c(`F/P`, `M/F`, `W/M`), ~round(., 3))
+  ) |>
+  kable(caption = "IPAT decomposition — Atlantic salmon, 2000–2013",
+        format.args = list(big.mark = ","))
+```
+
+### Plot W alongside P — Decoupling
+
+```{r plot_W_vs_P, fig.width=10, fig.height=4}
+df |>
+  select(year, P = atlantic_salmon_t, W = W_t) |>
+  pivot_longer(-year, names_to = "variable", values_to = "tonnes") |>
+  ggplot(aes(x = year, y = tonnes / 1e6, colour = variable, fill = variable)) +
+  geom_area(alpha = 0.12, position = "identity") +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2.5) +
+  scale_colour_manual(values = c("P" = "steelblue", "W" = "firebrick"),
+                      labels = c("P = salmon produced", "W = wild fish extracted")) +
+  scale_fill_manual(values = c("P" = "steelblue", "W" = "firebrick"), guide = "none") +
+  scale_x_continuous(breaks = df$year) +
+  labs(title = "W vs P — Absolute decoupling of wild fish extraction from salmon production",
+       subtitle = "P grew +166% while W fell -64% over 2000-2013",
+       x = "Year", y = "Million tonnes", colour = NULL) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "top")
+
+ggsave("Images/Absolut_decoupling.png", width = 10, height = 4, dpi = 300)
+
+```
+
+---
+
+## Step 4 — Growth Factor Analysis (2000 to 2013)
+
+Ln-additive decomposition: ln(W_t/W_0) = ln(P_t/P_0) + ln(FCR_t/FCR_0) + ln(MF_t/MF_0) + ln(WM_t/WM_0)
+
+```{r growth_factors}
+base_yr <- df |> filter(year == 2000)
+end_yr  <- df |> filter(year == 2013)
+
+delta_lnP   <- log(end_yr$atlantic_salmon_t / base_yr$atlantic_salmon_t)
+delta_lnFCR <- log(end_yr$FCR / base_yr$FCR)
+delta_lnMF  <- log(end_yr$M_F / base_yr$M_F)
+delta_lnWM  <- log(end_yr$W_M / base_yr$W_M)
+delta_lnW   <- log(end_yr$W_t / base_yr$W_t)
+
+gf <- data.frame(
+  Factor     = c("P (production)", "F/P (eFCR)", "M/F (marine share)", "W/M (FFDR_FM)", "W (total, observed)"),
+  Value_2000 = round(c(base_yr$atlantic_salmon_t, base_yr$FCR, base_yr$M_F, base_yr$W_M, base_yr$W_t)),
+  Value_2013 = round(c(end_yr$atlantic_salmon_t,  end_yr$FCR,  end_yr$M_F,  end_yr$W_M,  end_yr$W_t)),
+  Pct_change = round(c(
+    (end_yr$atlantic_salmon_t/base_yr$atlantic_salmon_t - 1)*100,
+    (end_yr$FCR/base_yr$FCR - 1)*100,
+    (end_yr$M_F/base_yr$M_F - 1)*100,
+    (end_yr$W_M/base_yr$W_M - 1)*100,
+    (end_yr$W_t/base_yr$W_t - 1)*100
+  ), 1),
+  Ln_contrib = round(c(delta_lnP, delta_lnFCR, delta_lnMF, delta_lnWM, delta_lnW), 3),
+  Share_pct  = round(c(delta_lnP, delta_lnFCR, delta_lnMF, delta_lnWM, delta_lnW) /
+                       delta_lnW * 100, 1)
+)
+
+kable(gf,
+      caption = "Ln-additive growth factor decomposition: 2000 to 2013",
+      col.names = c("Factor", "2000", "2013", "% change", "ln contribution", "Share of Delta ln(W) (%)"))
+```
+
+### Waterfall chart
+
+```{r plot_waterfall, fig.width=9, fig.height=5}
+wf_data <- data.frame(
+  label   = c("P\n(+166%)", "F/P\n(-23%)", "M/F\n(-55%)", "W/M\n(-61%)", "W\n(result)"),
+  contrib = c(delta_lnP, delta_lnFCR, delta_lnMF, delta_lnWM, delta_lnW),
+  type    = c("driver", "efficiency", "efficiency", "efficiency", "result")
+)
+
+# Compute bar positions
+wf_data$xpos  <- seq_len(nrow(wf_data))
+wf_data$yend  <- cumsum(c(0, wf_data$contrib[-nrow(wf_data)]))
+wf_data$yend[nrow(wf_data)] <- 0
+wf_data$ystart <- wf_data$yend
+wf_data$ytop   <- wf_data$yend + wf_data$contrib
+wf_data$ystart[nrow(wf_data)] <- 0
+wf_data$ytop[nrow(wf_data)]   <- wf_data$contrib[nrow(wf_data)]
+
+ggplot(wf_data) +
+  geom_rect(aes(xmin = xpos - 0.4, xmax = xpos + 0.4,
+                ymin = pmin(ystart, ytop), ymax = pmax(ystart, ytop),
+                fill = type), alpha = 0.85) +
+  geom_hline(yintercept = 0, colour = "grey30", linewidth = 0.5) +
+  geom_text(aes(x = xpos, y = (ystart + ytop) / 2,
+              label = sprintf("%+.2f", contrib)),
+          size = 3.8, fontface = "bold", colour = "white") +
+  scale_x_continuous(breaks = wf_data$xpos, labels = wf_data$label) +
+  scale_fill_manual(
+    values = c("driver" = "steelblue", "efficiency" = "#008080", "result" = "firebrick"),
+    labels = c("driver" = "Growth driver (pushes W up)",
+               "efficiency" = "Efficiency gain (pushes W down)",
+               "result" = "Net result on W"),
+    name = NULL) +
+  labs(title = "Waterfall decomposition of Delta ln(W) (2000 to 2013)",
+       subtitle = "Production growth was more than offset by three simultaneous efficiency gains",
+       x = NULL, y = "ln contribution to Delta ln(W)") +
+  theme(legend.position = "top")
+
+ggsave("Images/Waterfall_chart_factors_IPAT_1.png", width = 9, height = 5, dpi = 300)
+
+```
+
+### Index plot (2000 = 100)
+
+```{r plot_index, fig.width=10, fig.height=5}
+df_index <- df |>
+  mutate(
+    idx_P   = atlantic_salmon_t / first(atlantic_salmon_t) * 100,
+    idx_FCR = FCR / first(FCR) * 100,
+    idx_MF  = M_F / first(M_F) * 100,
+    idx_WM  = W_M / first(W_M) * 100,
+    idx_W   = W_t / first(W_t) * 100
+  ) |>
+  select(year,
+         `P (salmon)`        = idx_P,
+         `F/P (eFCR)`        = idx_FCR,
+         `M/F (marine share)`= idx_MF,
+         `W/M (FFDR_FM)`     = idx_WM,
+         `W (wild fish)`     = idx_W) |>
+  pivot_longer(-year, names_to = "variable", values_to = "index")
+
+ggplot(df_index, aes(x = year, y = index, colour = variable,
+                     linewidth = (variable == "W (wild fish)"))) +
+  geom_hline(yintercept = 100, linetype = "dashed", colour = "grey50") +
+  geom_line() +
+  geom_point(size = 2) +
+  scale_colour_manual(values = c(
+    "P (salmon)"         = "steelblue",
+    "F/P (eFCR)"         = "darkorange",
+    "M/F (marine share)" = "#008080",
+    "W/M (FFDR_FM)"      = "firebrick",
+    "W (wild fish)"      = "black"
+  )) +
+  scale_linewidth_manual(values = c("FALSE" = 0.9, "TRUE" = 2), guide = "none") +
+  scale_x_continuous(breaks = df$year) +
+  labs(title = "Index of all IPAT factors (2000 = 100)",
+       subtitle = "P grew +166%; efficiency gains more than compensated — W fell to 36% of 2000 level",
+       x = "Year", y = "Index (2000 = 100)", colour = NULL) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "top")
+
+ggsave("Images/Index_IPAT_1.png", width = 10, height = 5, dpi = 300)
+
+```
+
+---
+
+## Step 5 — Contribution Charts
+
+### 5a — Multiplicative factor contributions relative to 2000
+
+```{r contribution_multipliers, fig.width=10, fig.height=5}
+df_contrib <- df |>
+  mutate(
+    contrib_P   = atlantic_salmon_t / first(atlantic_salmon_t),
+    contrib_FCR = FCR / first(FCR),
+    contrib_MF  = M_F / first(M_F),
+    contrib_WM  = W_M / first(W_M)
+  ) |>
+  select(year,
+         `P (production)` = contrib_P,
+         `F/P (eFCR)`     = contrib_FCR,
+         `M/F (marine)`   = contrib_MF,
+         `W/M (FFDR_FM)`  = contrib_WM) |>
+  pivot_longer(-year, names_to = "factor", values_to = "multiplier")
+
+ggplot(df_contrib, aes(x = year, y = multiplier, colour = factor)) +
+  geom_hline(yintercept = 1, linetype = "dashed", colour = "grey50") +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2.5) +
+  scale_colour_manual(values = c(
+    "P (production)" = "steelblue",
+    "F/P (eFCR)"     = "darkorange",
+    "M/F (marine)"   = "#008080",
+    "W/M (FFDR_FM)"  = "firebrick"
+  )) +
+  scale_x_continuous(breaks = df$year) +
+  labs(title = "Multiplicative factor contributions relative to 2000",
+       subtitle = "Values above 1 increase W; below 1 decrease W. Their product = W index.",
+       x = "Year", y = "Factor ratio (2000 = 1)", colour = NULL) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "top")
+
+ggsave("Images/Contribution_multipliers_IPAT_1.png", width = 10, height = 5, dpi = 300)
+
+```
+
+### 5b — Year-on-year change in W decomposed by factor
+
+```{r yoy_decomposition, fig.width=12, fig.height=5}
+df_yoy <- df |>
+  mutate(
+    dW_P   = W_t * log(atlantic_salmon_t / lag(atlantic_salmon_t)),
+    dW_FCR = W_t * log(FCR / lag(FCR)),
+    dW_MF  = W_t * log(M_F / lag(M_F)),
+    dW_WM  = W_t * log(W_M / lag(W_M))
+  ) |>
+  filter(!is.na(dW_P)) |>
+  select(year,
+         `P (production)` = dW_P,
+         `F/P (eFCR)`     = dW_FCR,
+         `M/F (marine)`   = dW_MF,
+         `W/M (FFDR_FM)`  = dW_WM) |>
+  pivot_longer(-year, names_to = "factor", values_to = "delta_W")
+
+ggplot(df_yoy, aes(x = year, y = delta_W / 1e3, fill = factor)) +
+  geom_col(position = "stack", alpha = 0.85) +
+  geom_hline(yintercept = 0, colour = "grey30") +
+  scale_fill_manual(values = c(
+    "P (production)" = "steelblue",
+    "F/P (eFCR)"     = "darkorange",
+    "M/F (marine)"   = "#008080",
+    "W/M (FFDR_FM)"  = "firebrick"
+  )) +
+  scale_x_continuous(breaks = unique(df_yoy$year)) +
+  labs(title = "Year-on-year change in W decomposed by IPAT factor",
+       subtitle = "Bars above zero push W up (P); bars below push W down (efficiency factors)",
+       x = "Year", y = "Delta W (thousand tonnes)", fill = NULL) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "top")
+
+ggsave("Images/YoY_decomposition_IPAT_1.png", width = 12, height = 5, dpi = 300)
+
+```
+
+---
+
+## Step 6 — Export to CSV
+
+```{r export_csv}
+csv_out <- df |>
+  select(
+    year,
+    P_atlantic_salmon_t    = atlantic_salmon_t,
+    FP_eFCR                = FCR,
+    MF_marine_share        = M_F,
+    WM_FFDR_FM             = W_M,
+    F_total_feed_t         = F_t,
+    M_marine_ingredients_t = M_t,
+    W_wild_fish_t          = W_t
+  )
+
+write.csv(csv_out, "ipat_decomposition_2000_2013.csv", row.names = FALSE)
+cat("Saved: ipat_decomposition_2000_2013.csv\n")
+
+csv_out |>
+  mutate(
+    across(ends_with("_t"), round),
+    across(c(FP_eFCR, MF_marine_share, WM_FFDR_FM), ~round(., 3))
+  ) |>
+  kable(caption = "Final IPAT decomposition table",
+        format.args = list(big.mark = ","))
+```
