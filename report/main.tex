@@ -1319,19 +1319,32 @@ discharge $A_{out}$.
 
 \begin{table}[H]
 \centering
-\caption{IPAT 2 annual data, 2012--2019}
-\begin{tabular}{crrrrrr}
+\caption{IPAT 2 annual data, 2012--2019.
+The identity is $A_{out} = N_{\text{salmon}} \times \lambda \times \tau \times \phi \times \delta$.}
+\begin{tabular}{crrrrrrr}
 \hline
-\textbf{Year} & \textbf{$\lambda$} & \textbf{Bath (kg)} & \textbf{Oral (kg)} & \textbf{$A_{out}$ (kg)} \\
+\textbf{Year}
+  & \textbf{$N_{\text{salmon}}$}
+  & \textbf{$\lambda$}
+  & \textbf{$\tau$ ($\times 10^{-5}$)}
+  & \textbf{$\phi$}
+  & \textbf{$\delta$}
+  & \textbf{$A_{out}$ (kg)} \\
+  & (fish)
+  & (lice/fish)
+  & (events/lice)
+  & (dim'less)
+  & (kg/event)
+  & \\
 \hline
-2012 & 0.214 & 4,412 & 71.9  & 4,483.9 \\
-2013 & 0.146 & 3,384 & 150.6 & 3,534.6 \\
-2014 & 0.207 & 4,950 & 235.9 & 5,185.9 \\
-2015 & 0.167 & 4,104 & 259.9 & 4,363.9 \\
-2016 & 0.163 & 1,360 & 277.9 & 1,638.0 \\
-2017 & 0.146 & 226   & 66.7  & 292.7   \\
-2018 & 0.142 & 170   & 18.3  & 188.3   \\
-2019 & 0.159 & 164   & 47.8  & 211.8   \\
+2012 & 246\,418\,984 & 0.214 &  9.91 & 0.500 & 1.719 & 4\,484 \\
+2013 & 233\,664\,724 & 0.146 & 14.52 & 0.502 & 1.421 & 3\,535 \\
+2014 & 251\,671\,172 & 0.207 & 10.11 & 0.460 & 2.147 & 5\,186 \\
+2015 & 260\,669\,156 & 0.167 & 14.79 & 0.380 & 1.791 & 4\,364 \\
+2016 & 246\,723\,848 & 0.163 & 16.30 & 0.356 & 0.701 & 1\,638 \\
+2017 & 247\,270\,552 & 0.146 & 19.65 & 0.153 & 0.269 &   293 \\
+2018 & 256\,400\,642 & 0.142 &  8.38 & 0.239 & 0.259 &   188 \\
+2019 & 272\,808\,408 & 0.159 &  7.98 & 0.274 & 0.223 &   212 \\
 \hline
 \end{tabular}
 \label{tab:ipat2data}
@@ -1339,8 +1352,9 @@ discharge $A_{out}$.
 
 \section{Code}
 
-All data processing and figures were produced in Python and R. 
-The full source code is available in the project repository. 
+All data processing and figures were produced in python and R.
+The full source code and datasets are publicly available at
+\url{https://github.com/htthomasepfl/hum470-aquaculture-biodiversity.git}. 
 The key computational steps are summarised below.
 
 \subsection{IPAT 1 — Wild Fish Extraction (R)}
