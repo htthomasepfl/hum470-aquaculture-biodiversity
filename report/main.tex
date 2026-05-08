@@ -19,13 +19,14 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{url}
-\usepackage[hidelinks]{hyperref}
-\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{doi}
+\usepackage[breaklinks=true]{hyperref}
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
     citecolor=black,
-    urlcolor=blue
+    urlcolor=black
 }
 \usepackage{xcolor}
 \usepackage{titlesec}
@@ -40,9 +41,6 @@
 \usepackage{emptypage}
 \usepackage{etoolbox}
 \patchcmd{\chapter}{\clearpage}{}{}{}
-\usepackage{titlesec}
-\titleformat{\chapter}[block]{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{0pt}{\huge}
-\titlespacing*{\chapter}{0pt}{10pt}{0pt}
 
 % --- Header / Footer ---------------------------
 \pagestyle{fancy}
@@ -132,34 +130,34 @@ dramatically along the Norwegian coastline over the past five decades,
 transforming from a small-scale coastal activity into a global export industry worth billions of Norwegian kroner annually. Today, Norway produces
 roughly half of the world's farmed Atlantic salmon, with production concentrated in sea-based net pen farms located in the fjords and coastal waters stretching from the south to the far north of the country.
 
-This economic success also brings environmental costs. Firstly, salmon are carnivorous fish and they require food that is rich in protein and omega-3 fatty acids. Historically, a large share of this protein has come from wild-caught fish such as anchovies, herring, and sand eels. Harvesting these species at large scale to feed farmed salmon puts pressure on the marine ecosystem by reducing food available for seabirds, marine mammals, larger fish, and other natural predators. Secondly, the high densities of salmon in net pens create ideal conditions for sea lice to spread. Sea lice are small parasitic crustaceans that attach to fish and feed on their skin. They also have the potential to spread to and weaken wild Atlantic salmon in nearby rivers and fjords. Controlling sea lice has historically required the use of chemical treatments, many of which are toxic to crustaceans such as lobsters and shrimp when released into
+This economic success also brings environmental costs. Firstly, salmon are carnivorous fish and they require food that is rich in protein and omega-3 fatty acids. Historically, a large share of this protein has come from wild-caught fish such as anchovies, herring, and sand eels. Harvesting these species at industrial scale can disrupt lower trophic levels of marine food webs. Secondly, the high densities of salmon in net pens create ideal conditions for sea lice to spread. Sea lice are small parasitic crustaceans that attach to fish and feed on their skin. They also have the potential to spread to and weaken wild Atlantic salmon in nearby rivers and fjords. Controlling sea lice has historically required the use of chemical treatments, many of which are toxic to crustaceans such as lobsters and shrimp when released into
 the surrounding water.
 
-Both of these pressures, use of wild fish for feed and chemical pollution from lice treatments are closely tied to historical salmon farming operations and the large scale of the industry. As production has expanded, an important question is whether these impacts have also increased, or if improvements in technology and regulation have helped limit them, making the industry more sustainable.
+For both of these pressures, the use of wild fish for feed and chemical pollution from lice treatments are closely tied to historical salmon farming operations and the large scale of the industry. As production has expanded, an important question is whether these impacts have also increased, or if improvements in technology and regulation have helped limit them, making the industry more sustainable.
 
 
 \section{Research Questions}
 
-Our analysis into this industry is structured around two research questions: 
+Our analysis of this industry is structured around two research questions: 
 
 \begin{enumerate}
     \item \textbf{Has absolute decoupling occurred?} Have the two biodiversity pressures we consider: total wild fish extraction \(W\) and total persistent antiparasitic discharge \(A_{out}\) declined in absolute terms over the study period, even though the industry has experienced massive growth in recent years?
 
     \item \textbf{What factors explain observed trends?} Using IPAT
     decompositions, what specific drivers: feed efficiency, ingredient
-    substitution, treatment type, lice management are responsible for the
+    substitution, treatment type, and lice management are responsible for the
     observed changes in \(W\) and \(A_{out}\)?
 \end{enumerate}
 
 \section{Structure of the Report} 
 
-The report is organized as follows. Section~2 provides the scientific
+The report is organised as follows. Section~2 provides the scientific
 and industrial context, covering the growth of Norwegian salmon
 aquaculture, the three main impact mechanisms on marine biodiversity,
 and a brief review of existing studies on decoupling in this sector.
 Section~3 presents the theoretical foundations of the IPAT approach
 and the structure of both decompositions. Section~4 describes our
-data sources and the key assumptions we make. Sections 5 and 6 present and discuss the results of IPAT 1 (wild fish extraction) and IPAT 2 (chemical discharge) respectively. Section 7 then introduces the Norwegian regulatory framework, using the results of both decompositions as a basis for explaining which policies and incentives shaped the observed outcomes. Section 8 offers a broader discussion, comparing the two decouplings and evaluating the limits of our models. Section~9 draws recommendations for policy and industry practice, and Section~10
+data sources and the key assumptions we make. Sections 5 and 6 present and discuss the results of IPAT 1 (wild fish extraction) and IPAT 2 (chemical discharge), respectively. Section 7 then introduces the Norwegian regulatory framework, using the results of both decompositions as a basis for explaining which policies and incentives shaped the observed outcomes. Section 8 offers a broader discussion, comparing the two decouplings and evaluating the limits of our models. Section~9 draws recommendations for policy and industry practice, and Section~10
 concludes.
 
 
@@ -176,14 +174,13 @@ Atlantic salmon farming in Norway has been rapidly growing and changing over the
 in international markets \citep{ytrestoeyl2015}.
 
 Salmon is Norway's second largest export commodity after oil and
-gas, generating billions of Krones in annual export revenues and providing
+gas, generating billions of Kroner in annual export revenues and providing
 employment in coastal communities that do not have many other economic
 opportunities. The industry is geographically concentrated along Norway's
-western and northern coastline, where farms are located in open-sea net
-pen cages positioned in the cold, well-oxygenated waters of the fjords
+western and northern coastline, where farms are located in open-sea net-pen cages positioned in the cold, well-oxygenated waters of the fjords
 \citep{fiskeridir2024}.
 
-The sector is dominated by a small number of large companies, with some of the biggest being Mowi (formerly Marine Harvest), Lerøy Seafood, and SalMar. Each of these companies operate dozens of farm sites and also manage feed procurement, processing, and distribution systems. 
+The sector is dominated by a small number of large companies, with some of the biggest being Mowi (formerly Marine Harvest), Lerøy Seafood, and SalMar. Each of these companies operates dozens of farm sites and also manages feed procurement, processing, and distribution systems. 
 
 \section{Impact Mechanisms on Marine Biodiversity}
 
@@ -192,16 +189,16 @@ Despite how valuable this industry is for Norway's economy, the expansion of Nor
 \paragraph{Feed and wild fish extraction:}
 Farmed Atlantic salmon are carnivorous and require feed rich in protein and omega-3 fatty acids. These nutritional requirements have historically been met by using fishmeal and fish oil derived from wild-caught forage fish, small pelagic species such as anchovies, herrings, sand eels, and sprat, which occupy the lower levels of marine food webs. The issue is that extracting these species at a large enough scale to supply salmon feed for the whole industry reduces the availability of prey for their natural predators such as fish, seabirds, and marine mammals. This can also potentially have a cascading effect through the marine ecosystem structure \citep{tacon2008, oceanconservation}. The total mass of wild fish extracted to supply Norwegian salmon feed is the first biodiversity pressure we quantify in this report, denoted as \(W\).
 
-Measuring the scale of this extraction is not straightforward. It depends on many factors: total salmon produced, how much feed is needed per kilogram of salmon produced, what share of the feed used consists of marine ingredients, and how much wild fish is needed to produce each kilogram of marine ingredient. The latter depending heavily on whether those ingredients come from dedicated forage fish catches or from fish-processing by-products. These four factors form the basis of our first IPAT decomposition, described in Section~4.
+Measuring the scale of this extraction is not straightforward. It depends on many factors: total salmon produced, how much feed is needed per kilogram of salmon produced, what share of the feed used consists of marine ingredients, and how much wild fish is needed to produce each kilogram of marine ingredient. The latter depends heavily on whether those ingredients come from dedicated forage fish catches or from fish-processing by-products. These four factors form the basis of our first IPAT decomposition, described in Section~3.
 
 \paragraph{Sea lice and chemical treatments:}
-Sea lice (otherwise known as \textit{Lepeophtheirus salmonis}) are naturally occurring ectoparasites of salmon. In the wild the density of host fish is typically low enough to keep infestations in check. However, when using sea pen aquaculture the high density of fish creates conditions that make it significantly easier for lice to spread \citep{nhm2024}. Beyond just the welfare implications for farmed fish, this matters for the nearby marine biodiversity because sea lice larvae are released into surrounding waters and can infest wild Atlantic salmon and sea trout migrating past the farms \citep{plos2018}. Wild salmon populations near Norwegian aquaculture sites are already under a lot of pressure, and additional lice-induced mortality can reduce both abundance and genetic diversity which is especially important for salmon \citep{nhm2024}.
+Sea lice (otherwise known as \textit{Lepeophtheirus salmonis}) are naturally occurring ectoparasites of salmon. In the wild, the density of host fish is typically low enough to keep infestations in check. However, when using sea pen aquaculture, the high density of fish creates conditions that make it significantly easier for lice to spread \citep{nhm2024}. Beyond just the welfare implications for farmed fish, this matters for the nearby marine biodiversity because sea lice larvae are released into surrounding waters and can infest wild Atlantic salmon and sea trout migrating past the farms \citep{plos2018}. Wild salmon populations near Norwegian aquaculture sites are already under a lot of pressure, and additional lice-induced mortality can reduce both abundance and genetic diversity, which is especially important for salmon \citep{nhm2024}.
 
-To control sea lice, farms typically rely on a combination of chemical and non-chemical treatments. Chemical treatments can be divided into two categories, bath treatments and oral treatments. Bath treatments are where the fish are enclosed and exposed to an antiparasitic compound dissolved in seawater, and oral treatments are treatments in which the active substance is incorporated into the feed to be eaten by the salmon \citep{myhrjensen2020}. The environmental impacts of these two methods differ sharply, bath treatments release virtually all of the active substance directly into the fjord (approximately 100\% discharge), while the oral treatments are much lower due to the fact that 97\% of the active ingredients are metabolized before they reach the water (leaving an approximate 3\% discharge)\citep{myhrjensen2020}. Pyrethroids such as cypermethrin and deltamethrin, and the organophosphate azamethiphos are widely used in the bathing process and are toxic to non-target crustaceans, including European lobster (\textit{Homarus gammarus}), shrimp, and other invertebrates living near the farm sites \citep{samuelsen2020}. The mass of persistent antiparasitic substances discharged annually into Norwegian fjords is the second biodiversity pressure we quantify in this report, denoted as \(A_{out}\).
+To control sea lice, farms typically rely on a combination of chemical and non-chemical treatments. Chemical treatments can be divided into two categories, bath treatments and oral treatments. Bath treatments are where the fish are enclosed and exposed to an antiparasitic compound dissolved in seawater, and oral treatments are treatments in which the active substance is incorporated into the feed to be eaten by the salmon \citep{myhrjensen2020}. The environmental impacts of these two methods differ sharply, bath treatments release virtually all of the active substance directly into the fjord (approximately 100\% discharge), while the oral treatments are much lower due to the fact that 97\% of the active ingredients are metabolised before they reach the water (leaving an approximate 3\% discharge) \citep{myhrjensen2020}. Pyrethroids such as cypermethrin and deltamethrin, and the organophosphate azamethiphos are widely used in the bathing process and are toxic to non-target crustaceans, including European lobster (\textit{Homarus gammarus}), shrimp, and other invertebrates living near the farm sites \citep{samuelsen2020}. The mass of persistent antiparasitic substances discharged annually into Norwegian fjords is the second biodiversity pressure we quantify in this report, denoted as \(A_{out}\).
 
-A third mechanism does exist but is not investigated in this report. The escape of farmed Atlantic salmon into the wild, is recognised in the scientific literature as a source of biodiversity pressure. More specifically it is when escaped salmon change the local genetic pool and compete with the wild salmon. Farmed salmon are typically bred for rapid growth and differ genetically from the wild populations. When they escape their net pens and breed with wild fish, the resulting offspring tend to have lower survival rates in natural environments. This reduces the fitness and long-term health/survivability of wild Atlantic salmon populations. This mechanism is not captured by either of our IPAT decompositions, as consistent national data on escape rates, river entry points, and number of escaped salmon are insufficient to construct a reliable third identity. It is nonetheless included here for completeness, and a decomposition framework for genetic impact is proposed as a direction for future work in Section 9.3.
+A third mechanism does exist but is not investigated in this report. The escape of farmed Atlantic salmon into the wild, is recognised in the scientific literature as a source of biodiversity pressure. More specifically, it is when escaped salmon change the local genetic pool and compete with the wild salmon. Farmed salmon are typically bred for rapid growth and differ genetically from the wild populations. When they escape their net pens and breed with wild fish, the resulting offspring tend to have lower survival rates in natural environments. This reduces the fitness and long-term health/survivability of wild Atlantic salmon populations. This mechanism is not captured by either of our IPAT decompositions, as consistent national data on escape rates, river entry points, and number of escaped salmon are insufficient to construct a reliable third identity. It is nonetheless included here for completeness, and a decomposition framework for genetic impact is proposed as a direction for future work in Section 9.3.
 
-There are definitely many other recognised pressures from salmon aquaculture but they all fall outside the scope of this analysis, including greenhouse gas emissions from boats, pollution from fish processing, and the accumulation of fecal matter from the salmon beneath farm sites. The last one is especially surprising in its scale, a 2026 report by the Sunstone Institute estimates that the discharge from Norwegian aquaculture is comparable in magnitude to the raw sewage of millions of people, representing yet another large pressure on fjord ecosystems \citep{sunstone2026, guardian2026}. We focus on wild fish extraction and persistent chemical discharge because these are the two pressures where consistent time-series data exists to construct a complete IPAT decomposition over our study period. We emphasize that this choice is  data-driven, not a judgment about the importance of each of these pressures.
+There are definitely many other recognised pressures from salmon aquaculture, but they all fall outside the scope of this analysis, including greenhouse gas emissions from boats, pollution from fish processing, and the accumulation of fecal matter from the salmon beneath farm sites. The last one is especially surprising in its scale, a 2026 report by the Sunstone Institute estimates that the discharge from Norwegian aquaculture is comparable in magnitude to the raw sewage of millions of people, representing yet another large pressure on fjord ecosystems \citep{sunstone2026, guardian2026}. We focus on wild fish extraction and persistent chemical discharge because these are the two pressures for which consistent time-series data exists to construct a complete IPAT decomposition over our study period. We emphasise that this choice is data-driven, not a judgment about the importance of each of these pressures.
 
 
 
@@ -209,7 +206,7 @@ There are definitely many other recognised pressures from salmon aquaculture but
 
 Several previous studies have examined components of the relationship between
 Norwegian salmon production and its environmental footprint.
-\citep{ytrestoeyl2015} documented the decline in the marine
+\citet{ytrestoeyl2015} documented the decline in the marine
 ingredient share of Norwegian salmon feed between 2000 and 2013, showing
 that the share of fishmeal and fish oil in the feed fell from
 approximately 65\% to 29\% over this time period. This appears to be largely driven by the substitution of marine proteins with plant-based alternatives \citet{tacon2008}. On the treatment side, \citet{myhrjensen2020} provides the
@@ -240,9 +237,9 @@ Our contribution builds directly on this body of work. Rather than examining ind
 
 Determining whether the growth of Norwegian salmon aquaculture has led to an increase in its environmental footprint requires creating an IPAT equation. In this section, we present the IPAT approach that underpins our analysis, explain how we have adapted it to the two biodiversity pressures we study, and describe the structure of each decomposition.
 
-\section{IPAT 1 : Wild Fish Extraction}
+\section{IPAT 1: Wild Fish Extraction}
 
-Our first decomposition tracks $W$, which represents the total mass of wild fish extracted from the ocean annually to supply Norwegian salmon feed. $W$ is not directly reported in any official statistics but it is a derived quantity that we compute from the following identity:
+Our first decomposition tracks $W$, which represents the total mass of wild fish extracted from the ocean annually to supply Norwegian salmon feed. $W$ is not directly reported in any official statistics, but it is a derived quantity that we compute from the following identity:
 
 \begin{equation}
     W = P \times \frac{F}{P} \times \frac{M}{F} \times \frac{W}{M}
@@ -282,7 +279,7 @@ The analysis covers Atlantic salmon only, and not rainbow trout, which
 is also farmed in Norway. This is primarily due to data consistency:
 the Nofima benchmark reports that provide our $F/P$, $M/F$, and $W/M$
 values are based on feed data collected from the three major Norwegian
-feed producers : BioMar, EWOS, and Skretting. 
+feed producers: BioMar, EWOS, and Skretting. 
 
 The study period covers the years from 2000 to 2013. This window is determined by the availability of Nofima benchmark data. The reports provide point estimates for 2000, 2010, 2012, and 2013, which are the four years for which $F/P$, $M/F$, and $W/M$ can be derived with confidence. This window also captures the most dramatic phase of the transition in feed composition, during which the marine ingredient share fell from 64.6\% to 29.2\%.
 
@@ -304,8 +301,7 @@ persistent chemical discharge pressure. It is decomposed into the five
 
 where $\lambda \equiv N_{lice}/N_{salmon}$, $\tau \equiv Tr_{total}/N_{lice}$, 
 $\phi \equiv Tr_{chem,pol}/Tr_{total}$, and $\delta \equiv A_{out}/Tr_{chem,pol}$ 
-are defined in Table~\ref{tab:ipat2}.
-
+are defined in Table~\ref{tab:ipat2}. The subscript \textit{pol} denotes persistent (polluting) compounds, i.e.\ all chemical treatments excluding H$_2$O$_2$.
 
 \begin{table}[h]
 \centering
@@ -338,9 +334,7 @@ $Tr_{chem,pol}/Tr_{total}$
 $A_{out}/Tr_{chem,pol}$
     & $\delta$
     & Kilograms of persistent substance discharged per
-    chemical treatment event. falls sharply as the
-    treatment mix shifts from bath (100\% discharge)
-    toward oral ($\sim$3\% discharge)
+    chemical treatment event
     & kg\,event$^{-1}$ \\
 \hline
 \end{tabularx}
@@ -355,15 +349,7 @@ is:
                 + A_{\text{oral}} \times 0.03
 \end{equation}
 
-Hydrogen peroxide (H$_2$O$_2$) is excluded because it degrades in
-seawater with a half-life of less than one hour and does not persist
-in the marine environment \citep{myhrjensen2020}. Including it would
-cause it to represent over 99.9\% of total administered substance in
-some years, completely masking the relevant signal from the actual
-persistent compounds. Oral treatments are assigned a discharge factor
-of 0.03 (3\%), reflecting the fact that approximately 97\% of orally
-administered substances are metabolised by the fish before reaching
-the fjord \citep{myhrjensen2020}.
+Hydrogen peroxide (H$_2$O$_2$) is excluded because it degrades in seawater with a half-life of less than one hour and does not persist in the marine environment \citep{myhrjensen2020}. Including it would cause it to represent over 99.9\% of total administered substance in some years, completely masking the relevant signal from the actual persistent compounds. Oral treatments are assigned a discharge factor of 0.03 (3\%), reflecting the fact that approximately 97\% of orally administered substances are metabolised by the fish before reaching the fjord \citep{myhrjensen2020}.
 
 
 \paragraph{Study period:}
@@ -372,9 +358,7 @@ data required to compute $Tr_{total}/N_{lice}$,
 $Tr_{chem,pol}/Tr_{total}$, and $A_{out}/Tr_{chem,pol}$ are
 available from the BarentsWatch Fish Health API \citep{barentswatch},
 the Norwegian Directorate of Fisheries \citep{fiskeridir2024},
-and the study by \citet{myhrjensen2020}. This period also captures
-the most important transition in the Norwegian lice
-treatment methods used by the industry. During this time we see the near-disappearance of persistent bath treatments and the rise of non-chemical alternatives.
+and the study by \citet{myhrjensen2020}. This period also captures the most important transition in the Norwegian lice treatment methods used by the industry. During this time, we see the near-disappearance of persistent bath treatments and the rise of non-chemical alternatives.
 
 
 
@@ -393,10 +377,8 @@ treatment methods used by the industry. During this time we see the near-disappe
 \chapter{Data Sources and Assumptions}
 
 The two IPAT decompositions presented in this report rely on a small
-number of carefully selected data sources, each corresponding to one
-or more factors in the decomposition identities described in Section~4.
-In this section, we describe each source, explain how it was used, and
-state the key assumptions we make.
+number of carefully selected data sources, each corresponding to one or more factors in the decomposition identities described in Section~3.
+In this section, we describe each source, explain how it was used, and state the key assumptions we make.
 
 \section{Data Sources for IPAT 1}
 
@@ -410,7 +392,7 @@ The three efficiency factors are derived from the Nofima benchmark
 reports on Norwegian salmon feed composition. Specifically, we use two
 sources: \citet{ytrestoeyl2015} published in \textit{Aquaculture} (vol.
 448, pp. 365--374), and Nofima Report 36/2014 by Ytrestøyl, Aas, and
-Åsgård. These reports provide four point estimates during our timespan: 
+Åsgård. These reports provide four-point estimates during our timespan: 
 2000, 2010, 2012, and 2013. The values used are summarised in
 Table~\ref{tab:nofima}.
 
@@ -431,10 +413,7 @@ Table~\ref{tab:nofima}.
 \label{tab:nofima}
 \end{table}
 
-The $W/M$ value is defined as the Forage Fish Dependency Ratio for
-fishmeal (FFDR\textsubscript{FM}), which captures how much raw wild
-catch is needed to produce one kilogram of usable marine ingredient,
-excluding processing by-products.
+The $W/M$ value is defined as the Forage Fish Dependency Ratio for fishmeal (FFDR\textsubscript{FM}), which captures how much raw wild catch is needed to produce one kilogram of usable marine ingredient, excluding processing by-products.
 
 \section{Data Sources for IPAT 2}
 
@@ -488,7 +467,7 @@ rather than precise, particularly in the 2001 to 2009 period where
 the only available benchmarks are 2000 and 2010.
 
 \paragraph{Atlantic salmon only:}
-As explained in Section~4, our IPAT~1 analysis covers Atlantic salmon
+As explained in Section~3.1, our IPAT~1 analysis covers Atlantic salmon
 production only, excluding rainbow trout. This is necessary for internal
 consistency with the Nofima benchmark data, which are based on Atlantic
 salmon feed. Using total Norwegian salmonid production as $P$ while
@@ -519,7 +498,7 @@ $A_{out}$ declined by more than 90\% over the study period, would
 remain unchanged, given the magnitude of the observed decline.
 
 \paragraph{Exclusion of hydrogen peroxide:}
-As stated in Section~4, H$_2$O$_2$ is excluded from our $A_{out}$
+As stated in Section~3.2, H$_2$O$_2$ is excluded from our $A_{out}$
 definition on the grounds that it degrades in seawater within less than
 one hour and does not accumulate in the marine environment. This is an
 ecologically motivated choice. Our indicator is designed to capture
@@ -667,8 +646,8 @@ The decomposition shows the following ln-contributions:
 
 The three efficiency gains sum to $-2.00$ ln-points, more than twice
 the scale effect of $+0.98$. Production growth alone would have more
-than doubled wild fish extraction but the combined improvements in feed
-efficiency and ingredient sourcing reduced it by nearly two thirds.
+than doubled wild fish extraction, but the combined improvements in feed
+efficiency and ingredient sourcing reduced it by nearly two-thirds.
 
 \section{Summary of IPAT 1 Results}
 
@@ -720,7 +699,7 @@ This section presents the results of our second IPAT decomposition,
 covering the period 2012 to 2019. We first document the overall
 decoupling between salmon production and chemical discharge, then
 trace the evolution of each of the five factors, and finally quantify
-their individual contributions through a ln-additive waterfall
+their individual contributions through an ln-additive waterfall
 decomposition.
 
 \section{Production Scale and the Baseline}
@@ -733,7 +712,7 @@ in IPAT~1. The 2012 to 2019 period falls within the post-peak phase of
 the industry's rapid expansion, during which the Traffic Light System
 and other regulatory constraints began to slow the rate of capacity
 growth. The relatively flat production trajectory over this period is
-important context for interpreting the IPAT~2 results because unlike in
+important context for interpreting the IPAT~2 results because, unlike in
 IPAT~1, the scale effect here is small, meaning that the observed
 changes in $A_{out}$ are driven almost entirely by changes in the
 lice management factors rather than by changes in production volume.
@@ -753,7 +732,7 @@ over the full 2012 to 2019 period.
     \label{fig:decoupling2}
 \end{figure}
 
-The decline is large. While production grew modestly, $A_{out}$ collapsed from 4,484 kg in 2012 to 212 kg in 2019, a decline of 95.3\%. The two series move in opposite directions throughout the period, with the divergence accelerating sharply after 2015. This is a case of absolute decoupling which is evident because the environmental pressure $A_{out}$ fell to less than 5\% of its 2012 level even as the industry continued to grow.
+The decline is large. While production grew modestly, $A_{out}$ collapsed from 4,484 kg in 2012 to 212 kg in 2019, a decline of 95.3\%. The two series move in opposite directions throughout the period, with the divergence accelerating sharply after 2015. This is a case of absolute decoupling, which is evident because the environmental pressure $A_{out}$ fell to less than 5\% of its 2012 level even as the industry continued to grow.
 
 Figure~\ref{fig:Aout_abs} shows $A_{out}$ in absolute terms (kg
 per year), which makes the magnitude of the decline more concrete.
@@ -776,7 +755,7 @@ pressure in 2014, which drove up the number of chemical treatment
 events before the structural shift towards non-chemical alternatives
 had fully taken hold. Second, the sharpest single-year drop occurs
 between 2015 and 2016, when $A_{out}$ fell from 4,364 kg to 1,638
-kg, a reduction of 62\% in a single year marking the point at which the transition away from persistent bath treatments became decisive at the national scale. By 2017, $A_{out}$ had fallen to 293 kg, and it remained below 220 kg in both 2018 and 2019.
+kg, a reduction of 62\% in a single year, marking the point at which the transition away from persistent bath treatments became decisive at the national scale. By 2017, $A_{out}$ had fallen to 293 kg, and it remained below 220 kg in both 2018 and 2019.
 
 \section{IPAT 2 Factor Time Series}
 
@@ -843,9 +822,9 @@ in the decomposition, accounting for approximately 67\% of the
 total observed decline. Its decline is explained by a shift within
 the chemical treatment category itself: bath treatments, which
 release approximately 100\% of the active substance directly into
-the surrounding water, became progressively rarer, while oral
+the surrounding water became progressively rarer, while oral
 treatments, which result in only approximately 3\% of the
-administered substance reaching the fjord, became more common.
+administered substance reaching the fjord became more common.
 The result is that even when a farm resorts to a chemical
 treatment, the amount of persistent substance discharged per
 event is now a fraction of what it was in 2012.
@@ -925,7 +904,7 @@ $A_{out}/Tr_{chem,pol}$: as bath treatments were replaced by
 oral and non-chemical alternatives, the average discharge per
 chemical event collapsed from 1.72 kg in 2012 to 0.22 kg in 2019.
 
-The rise of non-chemical treatments is equally visible. mechanical
+The rise of non-chemical treatments is equally visible. Mechanical
 and thermal delousing events, which were rare in 2012, grew to
 represent the majority of all treatment events by 2017--2018,
 driving the decline in $Tr_{chem,pol}/Tr_{total}$ documented above.
@@ -970,7 +949,7 @@ The results from Sections~5 and~6 raise a natural question: why did the efficien
 
 Access to Norwegian salmon aquaculture is controlled through a site licensing system administered by the Norwegian Directorate of Fisheries (\textit{Fiskeridirektoratet}). Each licence specifies a \textit{Maximum Allowed Biomass} (MAB), i.e. the maximum tonnage of live fish that may be held at the site at any point in time.
 
-Total production capacity expanded over time through successive licence allocations, which explains how salmon output grew from approximately 400,000 tonnes in 2000 to over 1.2 million tonnes in 2013, the 166\% increase that constitutes the scale effect in IPAT~1. Crucially, the MAB system did not constrain production growth during this period. The absolute decoupling we document wild fish extraction $W$ fell by 64\% despite this production increase, is therefore not the result of supply-side caps, but entirely attributable to improvements in $F/P$, $M/F$, and $W/M$, driven by feed industry innovation and market incentives.
+Total production capacity expanded over time through successive licence allocations, which explains how salmon output grew from approximately 400,000 tonnes in 2000 to over 1.2 million tonnes in 2013, the 166\% increase that constitutes the scale effect in IPAT~1. Crucially, the MAB system did not constrain production growth during this period. The absolute decoupling we document, wild fish extraction $W$ fell by 64\% despite this production increase, is therefore not the result of supply-side caps, but entirely attributable to improvements in $F/P$, $M/F$, and $W/M$, driven by feed industry innovation and market incentives.
 
 \section{Sea Lice Thresholds and Monitoring Obligations}
 
@@ -978,13 +957,13 @@ Norwegian law sets mandatory limits on sea lice infestation at farm sites. Farms
 
 Farms are also required to count lice weekly on a minimum of 20 fish per cage, covering at least half of the cages on site \citep{plos2018}. These counts are reported to the Norwegian Food Safety Authority (\textit{Mattilsynet}) and compiled into national databases accessible through the BarentsWatch portal \citep{barentswatch}.
 
-These rules connect directly to our IPAT~2 decomposition. The lice threshold caps $\lambda$, the mean number of adult female lice per fish, ensuring it cannot rise far above the legal limit without triggering a response. The mandatory treatment requirement shapes $\tau$, the number of treatment events per unit of lice burden, which is why $\tau$ remained stable over our study period despite the overall decline in chemical discharge. %Importantly, the regulation requires that treatment occurs, but does not specify which type, leaving open the choice between chemical bath treatments, oral treatments, and non-chemical alternatives. This is precisely the dimension captured by $\phi$ and $\delta$.
+These rules connect directly to our IPAT~2 decomposition. The lice threshold caps $\lambda$, the mean number of adult female lice per fish, ensuring it cannot rise far above the legal limit without triggering a response. The mandatory treatment requirement shapes $\tau$, the number of treatment events per unit of lice burden, which is why $\tau$ remained stable over our study period despite the overall decline in chemical discharge. Importantly, the regulation requires that treatment occurs, but does not specify which type, leaving open the choice between chemical bath treatments, oral treatments, and non-chemical alternatives. This is precisely the dimension captured by $\phi$ and $\delta$.
 
 \section{The Traffic Light System}
 
 In 2017, the Norwegian Ministry of Trade, Industry and Fisheries introduced the Traffic Light System (\textit{trafikklyssystemet}, TLS) \citep{nes2025, seafoodsource2024}. The system divides the Norwegian coastline into 13 production areas, each assessed annually by the Institute of Marine Research (IMR). Based on the estimated mortality of wild salmon smolts attributable to sea lice, each area is assigned a colour. Green areas may expand licensed capacity by 6\%, yellow areas are frozen, and red areas must reduce capacity by 6\%.
 
-This creates a direct financial incentive to keep lice levels low, since a red classification triggers a lasting reduction in permitted biomass. At the same time, farms were already required to treat whenever lice counts exceeded the legal threshold, regardless of the method chosen. In the context of IPAT~2, the TLS reinforced and locked in the ongoing decline in $\phi$, the share of chemical treatments, which had already begun before the system formally came into force. As pyrethroid resistance grew \citep{sciencedirect2020b} and the availability of non-chemical alternatives expanded, farms shifted toward mechanical, thermal, and biological delousing methods particularly after 2015--2016; the TLS then strengthened this trajectory by creating direct financial incentives to sustain it.
+This creates a direct financial incentive to keep lice levels low, since a red classification triggers a lasting reduction in permitted biomass. At the same time, farms were already required to treat whenever lice counts exceeded the legal threshold, regardless of the method chosen. In the context of IPAT~2, the TLS reinforced and locked in the ongoing decline in $\phi$, the share of chemical treatments, which had already begun before the system formally came into force. As pyrethroid resistance grew \citep{sciencedirect2020b} and the availability of non-chemical alternatives expanded, farms shifted toward mechanical, thermal, and biological delousing methods, particularly after 2015--2016; the TLS then strengthened this trajectory by creating direct financial incentives to sustain it.
 
 \section{Regulation of Antiparasitic Treatments}
 
@@ -1042,9 +1021,8 @@ innovation. As documented in Section~7.5, the decline in $M/F$ and
 $W/M$ was not mandated by direct regulation of feed composition. No
 Norwegian law required feed producers to reduce their fishmeal content
 or to source a specific share of marine ingredients from by-products.
-The drivers were instead a combination of economic incentives,
-fishmeal and fish oil are expensive commodities, and reducing their
-share lowers feed costs, market pressure from certification
+The drivers were instead a combination of economic incentives (fishmeal and fish oil are expensive commodities, and reducing their
+share lowers feed costs), market pressure from certification
 standards such as the ASC, and sustained investment in feed R\&D by
 the major producers. The role of the state was indirect, it created
 a monitoring and transparency framework that made sourcing practices
@@ -1062,7 +1040,7 @@ with the growing availability of mechanical, thermal, and biological
 alternatives drove the initial shift away from persistent bath
 treatments from 2015--2016 onward. Second, the Traffic Light System,
 introduced in 2017, reinforced this trajectory by tying production
-capacity directly to lice outcomes, creating stronger financial
+capacity directly to the lice outcomes, creating stronger financial
 incentives to maintain and deepen the transition to non-chemical
 methods. In this case, the state played a much more direct role than
 in IPAT~1, and the regulatory pressure of the pre-existing lice
@@ -1099,7 +1077,7 @@ decomposition charts in Section~5 should be interpreted as indicative
 rather than precise. The endpoint comparison (2000 vs 2013) is based
 entirely on measured benchmark values and is therefore robust to this
 assumption, but intermediate values carry interpolation uncertainty,
-particularly in the 2001 to 2009 period where the only available benchmark
+particularly in the 2001 to 2009 period, where the only available benchmark
 points are 2000 and 2010.
 
 \paragraph{Mass-based rather than toxicity-weighted chemical impacts:}
@@ -1112,8 +1090,8 @@ model implicitly treats one kilogram of azamethiphos, deltamethrin,
 cypermethrin, emamectin benzoate, diflubenzuron, and teflubenzuron
 as equivalent, even though these substances differ substantially in
 toxicity, persistence, and ecological effects on non-target marine
-organisms. A more complete framework would weight each substance using
-ecotoxicity characterization factors from life-cycle assessment (LCA)
+organisms. A more complete framework would weigh each substance using
+ecotoxicity characterisation factors from life-cycle assessment (LCA)
 studies or ecotoxicological literature.
 
 We do not implement such toxicity weighting here because consistent
@@ -1139,7 +1117,7 @@ conclusions about individual farms or regions.
 
 \paragraph{Scope of the biodiversity impact:}
 
-A fourth caveat concerns scope. The two pressures we quantify, wild fish extraction and chemical discharge, are those for which the data required to construct a full decomposition identity were available. Escaped farmed salmon represent a third recognised mechanism, operating through genetic introgression and competitive displacement of wild conspecifics, but consistent national data on escape rates and subsequent river entry rates over our study periods are insufficient to support a comparable quantitative analysis. The absence of a third decomposition does not imply that this pressure is negligible: it reflects a data limitation rather than an ecological judgment. Whether absolute decoupling has occurred on this dimension remains an open empirical question, and the data requirements for answering it are outlined in Section~9.3. More broadly, recent research has further documented the scale of eutrophication pressure from organic waste deposition beneath farm sites. It is a pressure that our framework does not capture \citep{sunstone2026, guardian2026} underscoring that the two pressures we quantify represent only a subset of the industry's total environmental footprint.
+A fourth caveat concerns scope. The two pressures we quantify, wild fish extraction and chemical discharge, are those for which the data required to construct a full decomposition identity were available. Escaped farmed salmon represent a third recognised mechanism, operating through genetic introgression and competitive displacement of wild conspecifics, but consistent national data on escape rates and subsequent river entry rates over our study periods are insufficient to support a comparable quantitative analysis. The absence of a third decomposition does not imply that this pressure is negligible: it reflects a data limitation rather than an ecological judgment. Whether absolute decoupling has occurred on this dimension remains an open empirical question, and the data requirements for answering it are outlined in Section~9.3. More broadly, recent research has further documented the scale of eutrophication pressure from organic waste deposition beneath farm sites. It is a pressure that our framework does not capture \citep{sunstone2026, guardian2026}, underscoring that the two pressures we quantify represent only a subset of the industry's total environmental footprint.
 
 
 
@@ -1166,7 +1144,7 @@ The 64\% decline in wild fish extraction documented in IPAT~1 is an impressive a
 
 First, Norwegian authorities should consider establishing mandatory targets for the share of marine ingredients sourced from by-products or certified sustainable fisheries, rather than relying solely on voluntary commitments and third-party certification. As production continues to grow, by-product supply chains are finite and may not keep pace with demand, which would push $W/M$ back up.
 
-Second, clear policy targets should be set for the marine ingredient share $M/F$ for example, a cap of 15\% marine ingredients in compound feed by a given year to give feed producers a long-term signal and incentivise continued investment in alternative protein sources such as insect meal, single-cell proteins, and algae-derived omega-3 oils.
+Second, clear policy targets should be set for the marine ingredient share $M/F$, for example, a cap of 15\% marine ingredients in compound feed by a given year to give feed producers a long-term signal and incentivise continued investment in alternative protein sources such as insect meal, single-cell proteins, and algae-derived omega-3 oils.
 
 Third, public research funding bodies and the major feed producers should jointly assess the remaining margin for feed conversion ratio improvement, since even modest gains at the current scale of production translate into substantial reductions in absolute feed demand.
 
@@ -1174,7 +1152,7 @@ Third, public research funding bodies and the major feed producers should jointl
 
 The 95.3\% decline in persistent antiparasitic discharge documented in IPAT~2 is fragile. The near-disappearance of persistent bath treatments could be reversed if lice pressure increases significantly or if resistance to current treatment alternatives develops.
 
-To address this, we recommend two targeted interventions. First, the Traffic Light System should be reinforced with a direct financial charge on sea lice emissions, a lice tax that would make the environmental cost of infestations visible to individual operators rather than shared across entire production zones. Such an instrument would directly target $\lambda$ and $\phi$, the two factors our decomposition identifies as having the most room for further improvement.
+To address this, we recommend two targeted interventions. First, the Traffic Light System should be reinforced with a direct financial charge on sea lice levels at each farm site, effectively a lice tax, making the environmental cost of infestations visible to individual operators rather than distributed across entire production zones. Such an instrument would directly target $\lambda$ and $\phi$, the two factors our decomposition identifies as having the most room for further improvement.
 
 Second, investment in preventive lice management should be prioritised through physical barriers such as lice skirts and snorkel systems, and continued investment in sea lice vaccines \citep{fishsite2024}. The current approach has largely solved the discharge problem by changing how lice are treated, but has not yet solved the infestation problem itself.
 
@@ -1228,12 +1206,12 @@ Without the Nofima benchmark series, the BarentsWatch \citep{barentswatch} lice 
 system, and the NVI Fish Health Reports \citep{nvi2019}, neither IPAT decomposition
 could have been constructed. This infrastructure should not be taken for
 granted. We recommend that Norwegian authorities commit to continuing
-and extending these data collection efforts: in particular by publishing
+and extending these data collection efforts, in particular by publishing
 updated Nofima feed benchmarks beyond the 2013 endpoint of our analysis,
 and by maintaining consistent treatment classification categories in the
 NVI reports so that future researchers can extend IPAT~2 without the
 reclassification discontinuities encountered around the 2017 to 2018 cleaner
-fish data. Transparent and consistent monitoring is not a byproduct of good
+fish data. Transparent and consistent monitoring is not a by-product of good
 environmental governance; in the Norwegian case, it has been a precondition
 for it.
 
@@ -1245,14 +1223,13 @@ for it.
 %==================================================
 \chapter{Conclusion}
 
-This report set out to answer two questions about the environmental footprint of Norwegian salmon aquaculture: whether two biodiversity pressures declined despite production growth, what factors explain the trends, and what role the regulatory framework played. Our two IPAT decompositions provide clear and 
-quantitative answers to all three: absolute decoupling has occurred on both indicators, and by a large margin.
+This report set out to answer two questions about the environmental footprint of Norwegian salmon aquaculture: whether two biodiversity pressures declined despite production growth, what factors explain the trends, and what role the regulatory framework played. Our two IPAT decompositions provide clear and quantitative answers to all three: absolute decoupling has occurred on both indicators, and by a large margin.
 
 For wild fish extraction, $W$ fell by 64\% between 2000 and 2013 while production more than doubled. The decoupling was driven by three simultaneous efficiency improvements in $F/P$, $M/F$, and $W/M$, which together more than offset the effect of production growth. For persistent antiparasitic discharge, $A_{out}$ fell by 95\% between 2012 and 2019 while production continued to grow. This was dominated by the structural shift from bath treatments to oral and non-chemical alternatives, captured by $\delta$ and $\phi$.
 
-The two decouplings were shaped by different forces. The decline in $W$ was market-led: economic pressure to reduce the cost of marine commodities, combined with certification standards and feed industry R\&D, drove improvements in $M/F$ and $W/M$ without any regulatory mandate on feed composition. The decline in $A_{out}$ required a more active regulatory hand such as the mandatory lice thresholds and the Traffic Light System were essential in producing the near-complete elimination of persistent chemical discharge. Market forces alone would likely not have produced a transition of this speed and magnitude.
+The two decouplings were shaped by different forces. The decline in $W$ was market-led: economic pressure to reduce the cost of marine commodities, combined with certification standards and feed industry R\&D, drove improvements in $M/F$ and $W/M$ without any regulatory mandate on feed composition. The decline in $A_{out}$ required a more active regulatory hand, such as the mandatory lice thresholds and the Traffic Light System were essential in producing the near-complete elimination of persistent chemical discharge. Market forces alone would likely not have produced a transition of this speed and magnitude.
 
-Three caveats apply. First, each IPAT captures one pressure in isolation, a reduction in $W$ says nothing about the land-use implications of soy-based substitutes, and a reduction in $A_{out}$ says nothing about the welfare costs of mechanical delousing. Second, IPAT~1 relies on linear interpolation between four benchmark points, and IPAT~2 uses national aggregate data that mask regional variation. Third, both study periods end before 2020, and it is not guaranteed that the efficiency trends documented here have been maintained since.
+Three caveats apply. First, each IPAT captures one pressure in isolation, a reduction in $W$ says nothing about the land-use implications of soy-based substitutes, and a reduction in $A_{out}$ says nothing about the welfare costs of mechanical delousing. Second, IPAT~1 relies on linear interpolation between four benchmark points, and IPAT~2 uses national aggregate data that masks regional variation. Third, both study periods end before 2020, and it is not guaranteed that the efficiency trends documented here have been maintained since.
 
 Norway's experience offers a rare case study in absolute decoupling between 
 industrial growth and environmental pressure. It required market incentives, regulatory pressure, technological innovation, and a data infrastructure that made outcomes visible and accountable. Identifying which conditions are load-bearing, as our decomposition framework helps to do, is a prerequisite for reproducing comparable outcomes elsewhere.
@@ -1281,7 +1258,7 @@ and the variables they provide.
 Fiskeridir sales statistics & $P$ (tonnes) & 2000--2019 & Fiskeridir (2024) \\[4pt]
 Nofima benchmark reports & $F/P$, $M/F$, $W/M$ & 2000--2013 & Ytrestøyl et al. (2015) \\[4pt]
 BarentsWatch Fish Health API & $N_{lice}/N_{salmon}$, $Tr_{total}$, $Tr_{chem}$ & 2012--2019 & BarentsWatch (2024) \\[4pt]
-Jensen et al. (2020) & $A_{dose}$ by substance & 2012--2019 & Myhre Jensen et al. (2020) \\
+Jensen et al. (2020) & $A_{\text{bath}}$, $A_{\text{oral}}$ by substance & 2012--2019 & Myhre Jensen et al. (2020) \\
 \hline
 \end{tabular}
 \label{tab:datasources}
@@ -1354,45 +1331,9 @@ The identity is $A_{out} = N_{\text{salmon}} \times \lambda \times \tau \times \
 
 \section{Code}
 
-All data processing and figures were produced in python and R.
+All data processing and figures were produced in Python and R.
 The full source code and datasets are publicly available at
 \url{https://github.com/htthomasepfl/hum470-aquaculture-biodiversity}. 
-The key computational steps are summarised below.
-
-\subsection{IPAT 1 — Wild Fish Extraction (R)}
-
-\begin{verbatim}
-# Nofima benchmark values
-years_bm <- c(2000, 2010, 2012, 2013)
-FCR  <- c(1.50, 1.20, 1.15, 1.15)
-MF   <- c(0.646, 0.414, 0.307, 0.292)
-WM   <- c(1.80, 1.10, 0.70, 0.70)
-
-# Piecewise linear interpolation
-years <- 2000:2013
-FCR_i <- approx(years_bm, FCR, xout = years)$y
-MF_i  <- approx(years_bm, MF,  xout = years)$y
-WM_i  <- approx(years_bm, WM,  xout = years)$y
-
-# Wild fish extraction
-W <- P * FCR_i * MF_i * WM_i
-\end{verbatim}
-
-\subsection{IPAT 2 — Antiparasitic Discharge (Python)}
-
-\begin{verbatim}
-# Discharge calculation (H2O2 excluded)
-bath_kg = (A_azamethiphos + A_cypermethrin 
-           + A_deltamethrin)
-oral_kg = (A_diflubenzuron + A_teflubenzuron 
-           + A_emamectin)
-A_out   = bath_kg * 1.00 + oral_kg * 0.03
-
-# Ln-additive decomposition
-import numpy as np
-ln_contrib = np.diff(np.log([x2012, x2019]))
-\end{verbatim}
-
 
 
 
@@ -1403,7 +1344,7 @@ ln_contrib = np.diff(np.log([x2012, x2019]))
 % BIBLIOGRAPHY
 %==================================================
 %\newpage
-\bibliographystyle{apalike}
+\bibliographystyle{plainnat}
 \bibliography{bibliography}
 
 
@@ -1532,15 +1473,14 @@ ln_contrib = np.diff(np.log([x2012, x2019]))
 % \end{thebibliography}
 
 
+
 \section*{AI Assistance Disclosure}
-
 AI assistance (Claude, Anthropic) was used in the preparation of this report for the following purposes:
-
 \begin{enumerate}
     \item Reformatting and copy-editing prose for clarity and concision.
     \item Reducing paragraph length to meet page constraints.
+    \item Improving the readability and visual formatting of R-generated figures (axis labels, colour palettes, layout adjustments).
 \end{enumerate}
-
-AI was not used to generate research questions, select data sources, perform any quantitative analysis, produce any figures or tables, or formulate any interpretations or conclusions. All analytical and interpretive content is the authors' own work.
+AI was not used to generate research questions, select data sources, perform any quantitative analysis, or formulate any interpretations or conclusions. All figure content, variable selections, and analytical decisions are the authors' own work.
 
 \end{document}
